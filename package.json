@@ -1,13 +1,13 @@
 {
   "name": "secure-api-project",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Secure REST API dengan JWT dan MongoDB Atlas",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Haris Fahril Akbar",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
