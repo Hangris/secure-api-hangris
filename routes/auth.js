@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
 });
 
 // PROTECTED ROUTE (contoh data rahasia)
-router.get("/data", (req, res) => {
+router.get("/secure", (req, res) => {
   const auth = req.headers.authorization;
   if (!auth) return res.status(401).json({ message: "No token provided" });
 
@@ -52,5 +52,6 @@ router.get("/data", (req, res) => {
     res.status(401).json({ message: "Invalid token" });
   }
 });
+
 
 module.exports = router;
