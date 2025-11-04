@@ -20,6 +20,12 @@ mongoose.connect(process.env.MONGO_URI)
 const authRoutes = require("./routes/auth");
 app.use("/api", authRoutes); // prefix: /api
 app.use(express.static("public"));
+// GET ALL USERS (testing)
+app.get("/api/users", async (req, res) => {
+  const users = await User.find({}, "username -_id");
+  res.json(users);
+});
+
 
 
 app.listen(3000, () => console.log("🚀 Server running on port 3000"));

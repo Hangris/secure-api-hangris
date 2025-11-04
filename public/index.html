@@ -1,70 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure API Login</title>
-  <style>
-    body { font-family: Arial; max-width: 400px; margin: 50px auto; text-align: center; }
-    input { margin: 10px; padding: 8px; width: 90%; }
-    button { padding: 10px 20px; margin: 10px; cursor: pointer; }
-    .result { margin-top: 20px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure API Frontend</title>
 </head>
 <body>
-  <h2>🔐 Secure API Demo</h2>
+  <h2>🔐 Secure API Frontend</h2>
+  <form id="registerForm">
+    <h3>Register</h3>
+    <input type="text" id="regUser" placeholder="Username" required />
+    <input type="password" id="regPass" placeholder="Password" required />
+    <button type="submit">Register</button>
+  </form>
 
-  <h3>Register</h3>
-  <input id="regUser" placeholder="Username">
-  <input id="regPass" type="password" placeholder="Password">
-  <button onclick="register()">Register</button>
+  <form id="loginForm">
+    <h3>Login</h3>
+    <input type="text" id="logUser" placeholder="Username" required />
+    <input type="password" id="logPass" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
 
-  <h3>Login</h3>
-  <input id="logUser" placeholder="Username">
-  <input id="logPass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-
-  <h3>Get Secure Data</h3>
-  <button onclick="getData()">Access Secure Route</button>
-
-  <div class="result" id="result"></div>
+  <button id="secureBtn">Access Secure Route</button>
 
   <script>
-    const API = "http://localhost:3000/api";
+    const baseURL = "https://<your-app-name>.up.railway.app/api"; // ganti dengan URL Railway kamu
 
-    async function register() {
-      const username = document.getElementById("regUser").value;
-      const password = document.getElementById("regPass").value;
-      const res = await fetch(`${API}/register`, {
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch(baseURL + "/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+          username: regUser.value,
+          password: regPass.value
+        })
       });
-      const data = await res.json();
-      document.getElementById("result").innerText = JSON.stringify(data);
-    }
+      alert(await res.text());
+    });
 
-    async function login() {
-      const username = document.getElementById("logUser").value;
-      const password = document.getElementById("logPass").value;
-      const res = await fetch(`${API}/login`, {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch(baseURL + "/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+          username: logUser.value,
+          password: logPass.value
+        })
       });
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      document.getElementById("result").innerText = "Login successful! Token saved.";
-    }
+      alert("Login success!");
+    });
 
-    async function getData() {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API}/data`, {
-        headers: { Authorization: "Bearer " + token }
+    document.getElementById("secureBtn").addEventListener("click", async () => {
+      const res = await fetch(baseURL + "/secure", {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       });
-      const data = await res.json();
-      document.getElementById("result").innerText = JSON.stringify(data);
-    }
+      alert(await res.text());
+    });
   </script>
 </body>
 </html>
